@@ -1,0 +1,263 @@
+```html
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Warung Reza - Nasi Padang</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial, sans-serif;
+    }
+
+    body{
+      background:#f5f5f5;
+    }
+
+    header{
+      background:#b22222;
+      color:white;
+      text-align:center;
+      padding:20px;
+    }
+
+    .container{
+      width:90%;
+      margin:auto;
+      padding:30px 0;
+    }
+
+    .menu-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+      gap:20px;
+    }
+
+    .card{
+      background:white;
+      border-radius:15px;
+      overflow:hidden;
+      box-shadow:0 5px 15px rgba(0,0,0,0.1);
+      transition:0.3s;
+    }
+
+    .card:hover{
+      transform:translateY(-5px);
+    }
+
+    .card img{
+      width:100%;
+      height:200px;
+      object-fit:cover;
+    }
+
+    .card-content{
+      padding:15px;
+    }
+
+    .card-content h3{
+      color:#b22222;
+      margin-bottom:10px;
+    }
+
+    .price{
+      color:green;
+      font-weight:bold;
+      margin:10px 0;
+    }
+
+    button{
+      background:#b22222;
+      color:white;
+      border:none;
+      padding:10px 15px;
+      border-radius:10px;
+      cursor:pointer;
+    }
+
+    button:hover{
+      background:#8b0000;
+    }
+
+    .cart{
+      margin-top:40px;
+      background:white;
+      padding:20px;
+      border-radius:15px;
+      box-shadow:0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .cart h2{
+      color:#b22222;
+      margin-bottom:15px;
+    }
+
+    .cart ul{
+      list-style:none;
+      margin-bottom:15px;
+    }
+
+    .cart li{
+      padding:8px 0;
+      border-bottom:1px solid #ddd;
+    }
+
+    .total{
+      font-size:20px;
+      font-weight:bold;
+      color:green;
+      margin-bottom:20px;
+    }
+
+    .payment-box input{
+      width:100%;
+      padding:12px;
+      margin-top:10px;
+      border:1px solid #ccc;
+      border-radius:10px;
+      font-size:16px;
+    }
+
+    .payment-box button{
+      width:100%;
+      margin-top:15px;
+    }
+
+    .result{
+      margin-top:20px;
+      padding:15px;
+      background:#f0f0f0;
+      border-radius:10px;
+      font-size:18px;
+    }
+
+    footer{
+      background:#222;
+      color:white;
+      text-align:center;
+      padding:20px;
+      margin-top:40px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🍛 Warung Reza</h1>
+  <p>Menu Nasi Padang</p>
+</header>
+
+<div class="container">
+
+  <div class="menu-grid">
+
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?q=80&w=1200&auto=format&fit=crop">
+      <div class="card-content">
+        <h3>Nasi Rendang</h3>
+        <p>Rendang sapi khas Padang.</p>
+        <div class="price">Rp 25.000</div>
+        <button onclick="addToCart('Nasi Rendang',25000)">Tambah</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1559847844-5315695dadae?q=80&w=1200&auto=format&fit=crop">
+      <div class="card-content">
+        <h3>Ayam Gulai</h3>
+        <p>Ayam gulai gurih.</p>
+        <div class="price">Rp 20.000</div>
+        <button onclick="addToCart('Ayam Gulai',20000)">Tambah</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1626804475297-41608ea09aeb?q=80&w=1200&auto=format&fit=crop">
+      <div class="card-content">
+        <h3>Telur Balado</h3>
+        <p>Pedas dan nikmat.</p>
+        <div class="price">Rp 15.000</div>
+        <button onclick="addToCart('Telur Balado',15000)">Tambah</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="cart">
+    <h2>🛒 Keranjang</h2>
+
+    <ul id="cart-list"></ul>
+
+    <div class="total">
+      Total: Rp <span id="total">0</span>
+    </div>
+
+    <div class="payment-box">
+      <label>💵 Uang Pembayaran:</label>
+      <input type="number" id="bayar" placeholder="Masukkan uang pembayaran">
+
+      <button onclick="hitungKembalian()">Bayar Sekarang</button>
+
+      <div class="result" id="hasil">
+        Kembalian akan tampil di sini
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<footer>
+  © 2026 Warung Reza
+</footer>
+
+<script>
+  let total = 0;
+
+  function addToCart(menu, harga){
+    const cartList = document.getElementById("cart-list");
+
+    const li = document.createElement("li");
+    li.textContent = `${menu} - Rp ${harga.toLocaleString()}`;
+
+    cartList.appendChild(li);
+
+    total += harga;
+
+    document.getElementById("total").textContent =
+      total.toLocaleString();
+  }
+
+  function hitungKembalian(){
+    const bayar = parseInt(document.getElementById("bayar").value);
+
+    if(isNaN(bayar)){
+      alert("Masukkan uang pembayaran!");
+      return;
+    }
+
+    const hasil = document.getElementById("hasil");
+
+    if(bayar < total){
+      hasil.innerHTML =
+        `❌ Uang kurang Rp ${(total - bayar).toLocaleString()}`;
+    }else{
+      const kembalian = bayar - total;
+
+      hasil.innerHTML = `
+        ✅ Pembayaran berhasil<br><br>
+        💰 Total : Rp ${total.toLocaleString()}<br>
+        💵 Bayar : Rp ${bayar.toLocaleString()}<br>
+        🪙 Kembalian : Rp ${kembalian.toLocaleString()}
+      `;
+    }
+  }
+</script>
+
+</body>
+</html>
+```
